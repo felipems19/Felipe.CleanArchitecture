@@ -3,11 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34723.18
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Felipe.CleanArchitecture.Api", "src\Felipe.CleanArchitecture.Api\Felipe.CleanArchitecture.Api.csproj", "{585B95B4-6D3E-49BF-B97E-EE9687D702FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Felipe.CleanArchitecture.Api", "src\Felipe.CleanArchitecture.Api\Felipe.CleanArchitecture.Api.csproj", "{585B95B4-6D3E-49BF-B97E-EE9687D702FC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D9C3EBFC-9A0D-4C04-AC5E-1E755E1BFFC8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{76849796-243A-46EB-AE85-8148FCC3AEF6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Felipe.CleanArchitecture.Application", "Felipe.CleanArchitecture.Application\Felipe.CleanArchitecture.Application.csproj", "{855AD243-6087-4FE8-8E08-24EA12862DC6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Felipe.CleanArchitecture.Domain", "Felipe.CleanArchitecture.Domain\Felipe.CleanArchitecture.Domain.csproj", "{C742301C-BF25-4DC4-BCBF-E115AD1C8ED5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Felipe.CleanArchitecture.Infrastructure", "Felipe.CleanArchitecture.Infrastructure\Felipe.CleanArchitecture.Infrastructure.csproj", "{29282E2B-8FF5-494B-8DA4-74CAC643C94F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,12 +25,27 @@ Global
 		{585B95B4-6D3E-49BF-B97E-EE9687D702FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{585B95B4-6D3E-49BF-B97E-EE9687D702FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{585B95B4-6D3E-49BF-B97E-EE9687D702FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{855AD243-6087-4FE8-8E08-24EA12862DC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{855AD243-6087-4FE8-8E08-24EA12862DC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{855AD243-6087-4FE8-8E08-24EA12862DC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{855AD243-6087-4FE8-8E08-24EA12862DC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C742301C-BF25-4DC4-BCBF-E115AD1C8ED5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C742301C-BF25-4DC4-BCBF-E115AD1C8ED5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C742301C-BF25-4DC4-BCBF-E115AD1C8ED5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C742301C-BF25-4DC4-BCBF-E115AD1C8ED5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29282E2B-8FF5-494B-8DA4-74CAC643C94F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29282E2B-8FF5-494B-8DA4-74CAC643C94F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29282E2B-8FF5-494B-8DA4-74CAC643C94F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29282E2B-8FF5-494B-8DA4-74CAC643C94F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{585B95B4-6D3E-49BF-B97E-EE9687D702FC} = {D9C3EBFC-9A0D-4C04-AC5E-1E755E1BFFC8}
+		{855AD243-6087-4FE8-8E08-24EA12862DC6} = {D9C3EBFC-9A0D-4C04-AC5E-1E755E1BFFC8}
+		{C742301C-BF25-4DC4-BCBF-E115AD1C8ED5} = {D9C3EBFC-9A0D-4C04-AC5E-1E755E1BFFC8}
+		{29282E2B-8FF5-494B-8DA4-74CAC643C94F} = {D9C3EBFC-9A0D-4C04-AC5E-1E755E1BFFC8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {91F495AA-6F9D-4DD2-8112-1C700B2BFA84}

@@ -3,12 +3,12 @@ using Felipe.CleanArchitecture.Domain.Interfaces.Repositories;
 
 namespace Felipe.CleanArchitecture.Application.UseCases;
 
-public interface IRegisterTruckUseCase
+public interface IAddTruckUseCase
 {
     Task ExecuteAsync(Guid id, string licensePlate, string model);
 }
 
-public class RegisterTruckUseCase(ITruckRepository repository) : IRegisterTruckUseCase
+public class AddTruckUseCase(ITruckRepository repository) : IAddTruckUseCase
 {
     public async Task ExecuteAsync(Guid id, string licensePlate, string model)
     {

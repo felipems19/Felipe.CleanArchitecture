@@ -72,7 +72,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
             entity.Property(t => t.LicensePlate)
                 .IsRequired()
-                .HasMaxLength(10);
+                .HasMaxLength(50);
 
             entity.Property(t => t.Model)
                 .IsRequired()

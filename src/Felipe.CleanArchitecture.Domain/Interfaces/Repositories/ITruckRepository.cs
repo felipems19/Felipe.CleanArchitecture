@@ -9,4 +9,5 @@ public interface ITruckRepository
     Task AddAsync(Truck truck);
     Task UpdateAsync(Truck truck);
     Task DeleteAsync(Guid id);
+    Task DeleteAllAsync();
 }

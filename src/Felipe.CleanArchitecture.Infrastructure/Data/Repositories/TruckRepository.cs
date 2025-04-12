@@ -1,5 +1,6 @@
 ﻿using Felipe.CleanArchitecture.Application.EventDispatching;
 using Felipe.CleanArchitecture.Domain.Entities;
+using Felipe.CleanArchitecture.Domain.Events;
 using Felipe.CleanArchitecture.Domain.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -41,11 +42,32 @@ public class TruckRepository(AppDbContext dbContext, IEventDispatcher eventDispa
         if (truck != null)
         {
             truck.Delete();
-            dbContext.Trucks.Update(truck);
+            dbContext.Trucks.Remove(truck);
             await dbContext.SaveChangesAsync();
 
             await eventDispatcher.Dispatch(truck.DomainEvents);
             truck.ClearDomainEvents();
         }
+    }
+
+    public async Task DeleteAllAsync()
+    {
+        var allTrucks = await GetAllAsync();
+
+        foreach (var truck in allTrucks)
+        {
+            truck.AddDomainEvent(new TruckDeletedEvent
+            {
+                TruckId = truck.Id,
+                DeletedAt = DateTime.UtcNow
+            });
+        }
+
+        dbContext.Trucks.RemoveRange(allTrucks);
+        await dbContext.SaveChangesAsync();
+
+        await eventDispatcher.Dispatch(allTrucks.SelectMany(t => t.DomainEvents));
+        foreach (var truck in allTrucks)
+            truck.ClearDomainEvents();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using Felipe.CleanArchitecture.Domain.Entities;
+using Felipe.CleanArchitecture.Infrastructure.Data.EntityConfigurations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -65,27 +66,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Configuração para a entidade Truck
-        modelBuilder.Entity<Truck>(entity =>
-        {
-            entity.HasKey(t => t.Id);
-
-            entity.Property(t => t.LicensePlate)
-                .IsRequired()
-                .HasMaxLength(50);
-
-            entity.Property(t => t.Model)
-                .IsRequired()
-                .HasMaxLength(50);
-
-            entity.Property(t => t.RegisteredAt)
-                .IsRequired();
-
-            entity.Property(t => t.IsActive)
-                .IsRequired();
-        });
-
-        base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfiguration(new TruckConfiguration());
     }
 
     public class CustomerContextDesignFactory : IDesignTimeDbContextFactory<AppDbContext>

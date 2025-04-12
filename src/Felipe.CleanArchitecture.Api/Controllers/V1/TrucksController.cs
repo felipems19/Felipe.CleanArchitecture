@@ -45,4 +45,11 @@ public class TrucksController() : BaseAppController
         await useCase.ExecuteAsync(id);
         return Ok(new { Message = "Caminhão excluído com sucesso!" });
     }
+
+    [HttpDelete]
+    public async Task<IActionResult> DeleteAllTrucks([FromServices] IDeleteAllTrucksUseCase useCase)
+    {
+        await useCase.ExecuteAsync();
+        return Ok(new { Message = "Todos os caminhões foram excluídos com sucesso!" });
+    }
 }

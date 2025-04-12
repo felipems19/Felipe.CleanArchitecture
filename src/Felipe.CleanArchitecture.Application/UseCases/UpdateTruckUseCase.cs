@@ -1,20 +1,27 @@
-﻿using Felipe.CleanArchitecture.Domain.Interfaces.Repositories;
+﻿using Felipe.CleanArchitecture.Application.Common.Errors;
+using Felipe.CleanArchitecture.Application.Models.Responses;
+using Felipe.CleanArchitecture.Domain.Interfaces.Repositories;
+using FluentResults;
 
 namespace Felipe.CleanArchitecture.Application.UseCases;
 
 public interface IUpdateTruckUseCase
 {
-    Task ExecuteAsync(Guid id, string licensePlate, string model);
+    Task<Result<DefaultTruckResponse>> ExecuteAsync(Guid id, string licensePlate, string model);
 }
 
 public class UpdateTruckUseCase(ITruckRepository repository) : IUpdateTruckUseCase
 {
-    public async Task ExecuteAsync(Guid id, string licensePlate, string model)
+    public async Task<Result<DefaultTruckResponse>> ExecuteAsync(Guid id, string licensePlate, string model)
     {
         var truck = await repository.GetByIdAsync(id);
-        if (truck is null) throw new Exception("Truck not found");
+
+        if (truck == null)
+            return Result.Fail(new NotFoundError("Caminhão não encontrado."));
 
         truck.UpdateInfo(licensePlate, model);
         await repository.UpdateAsync(truck);
+
+        return Result.Ok(new DefaultTruckResponse("Caminhão atualizado com sucesso."));
     }
 }

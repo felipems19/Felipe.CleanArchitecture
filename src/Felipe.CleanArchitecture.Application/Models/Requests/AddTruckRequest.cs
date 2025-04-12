@@ -2,7 +2,7 @@
 
 namespace Felipe.CleanArchitecture.Application.Models.Requests;
 
-public record RegisterTruckRequest
+public record AddTruckRequest
 (
     [Required, StringLength(50, ErrorMessage = "A placa deve ter no máximo 50 caracteres.")]
     string LicensePlate,

@@ -1,5 +1,7 @@
 ﻿using Asp.Versioning;
+using Felipe.CleanArchitecture.Application.Common.Errors;
 using Felipe.CleanArchitecture.Application.Models.Requests;
+using Felipe.CleanArchitecture.Application.Models.Responses;
 using Felipe.CleanArchitecture.Application.UseCases;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,45 +13,56 @@ namespace Felipe.CleanArchitecture.Api.Controllers.V1;
 public class TrucksController() : BaseAppController
 {
     [HttpPost]
-    public async Task<IActionResult> RegisterTruck([FromBody] RegisterTruckRequest request, [FromServices] IAddTruckUseCase registerTruckUseCase)
+    [ProducesResponseType(typeof(DefaultTruckResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> RegisterTruck([FromBody] AddTruckRequest request, [FromServices] IAddTruckUseCase registerTruckUseCase)
     {
-        await registerTruckUseCase.ExecuteAsync(Guid.NewGuid(), request.LicensePlate, request.Model);
-        return Ok(new { Message = "Caminhão registrado com sucesso!" });
+        return ProcessResult(await registerTruckUseCase.ExecuteAsync(Guid.NewGuid(), request.LicensePlate, request.Model));
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll([FromServices] IGetAllTrucksUseCase useCase)
+    [ProducesResponseType(typeof(AllTrucksResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetAllTrucks([FromServices] IGetAllTrucksUseCase useCase)
     {
-        var trucks = await useCase.ExecuteAsync();
-        return Ok(trucks);
+        return ProcessResult(await useCase.ExecuteAsync());
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetById(Guid id, [FromServices] IGetTruckByIdUseCase useCase)
+    [ProducesResponseType(typeof(TruckResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetTruckById(Guid id, [FromServices] IGetTruckByIdUseCase useCase)
     {
-        var truck = await useCase.ExecuteAsync(id);
-        if (truck is null) return NotFound();
-        return Ok(truck);
+        return ProcessResult(await useCase.ExecuteAsync(id));
     }
 
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> UpdateTruck(Guid id, [FromBody] RegisterTruckRequest request, [FromServices] IUpdateTruckUseCase useCase)
+    [ProducesResponseType(typeof(DefaultTruckResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> UpdateTruck(Guid id, [FromBody] AddTruckRequest request, [FromServices] IUpdateTruckUseCase useCase)
     {
-        await useCase.ExecuteAsync(id, request.LicensePlate, request.Model);
-        return Ok(new { Message = "Caminhão atualizado com sucesso!" });
+        return ProcessResult(await useCase.ExecuteAsync(id, request.LicensePlate, request.Model));
     }
 
     [HttpDelete("{id:guid}")]
+    [ProducesResponseType(typeof(DefaultTruckResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> DeleteTruck(Guid id, [FromServices] IDeleteTruckUseCase useCase)
     {
-        await useCase.ExecuteAsync(id);
-        return Ok(new { Message = "Caminhão excluído com sucesso!" });
+        return ProcessResult(await useCase.ExecuteAsync(id));
     }
 
     [HttpDelete]
+    [ProducesResponseType(typeof(DefaultTruckResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> DeleteAllTrucks([FromServices] IDeleteAllTrucksUseCase useCase)
     {
-        await useCase.ExecuteAsync();
-        return Ok(new { Message = "Todos os caminhões foram excluídos com sucesso!" });
+        return ProcessResult(await useCase.ExecuteAsync());
     }
 }

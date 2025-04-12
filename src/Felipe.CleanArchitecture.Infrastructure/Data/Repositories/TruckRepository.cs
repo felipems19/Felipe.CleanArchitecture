@@ -8,7 +8,7 @@ namespace Felipe.CleanArchitecture.Infrastructure.Data.Repositories;
 
 public class TruckRepository(AppDbContext dbContext, IEventDispatcher eventDispatcher) : ITruckRepository
 {
-    public async Task<IEnumerable<Truck>> GetAllAsync()
+    public async Task<List<Truck>> GetAllAsync()
     {
         return await dbContext.Trucks.ToListAsync();
     }
@@ -36,25 +36,19 @@ public class TruckRepository(AppDbContext dbContext, IEventDispatcher eventDispa
         truck.ClearDomainEvents();
     }
 
-    public async Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(Truck truck)
     {
-        var truck = await GetByIdAsync(id);
-        if (truck != null)
-        {
-            truck.Delete();
-            dbContext.Trucks.Remove(truck);
-            await dbContext.SaveChangesAsync();
+        truck.Delete();
+        dbContext.Trucks.Remove(truck);
+        await dbContext.SaveChangesAsync();
 
-            await eventDispatcher.Dispatch(truck.DomainEvents);
-            truck.ClearDomainEvents();
-        }
+        await eventDispatcher.Dispatch(truck.DomainEvents);
+        truck.ClearDomainEvents();
     }
 
-    public async Task DeleteAllAsync()
+    public async Task DeleteAllAsync(List<Truck> trucks)
     {
-        var allTrucks = await GetAllAsync();
-
-        foreach (var truck in allTrucks)
+        foreach (var truck in trucks)
         {
             truck.AddDomainEvent(new TruckDeletedEvent
             {
@@ -63,11 +57,11 @@ public class TruckRepository(AppDbContext dbContext, IEventDispatcher eventDispa
             });
         }
 
-        dbContext.Trucks.RemoveRange(allTrucks);
+        dbContext.Trucks.RemoveRange(trucks);
         await dbContext.SaveChangesAsync();
 
-        await eventDispatcher.Dispatch(allTrucks.SelectMany(t => t.DomainEvents));
-        foreach (var truck in allTrucks)
+        await eventDispatcher.Dispatch(trucks.SelectMany(t => t.DomainEvents));
+        foreach (var truck in trucks)
             truck.ClearDomainEvents();
     }
 }

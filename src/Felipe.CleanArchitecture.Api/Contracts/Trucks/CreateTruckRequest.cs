@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Felipe.CleanArchitecture.Application.Models.Requests;
+namespace Felipe.CleanArchitecture.Api.Contracts.Trucks;
 
-public record AddTruckRequest
+public record CreateTruckRequest
 (
     [Required, StringLength(50, ErrorMessage = "A placa deve ter no máximo 50 caracteres.")]
     string LicensePlate,

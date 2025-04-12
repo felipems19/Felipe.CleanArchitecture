@@ -1,5 +1,4 @@
-﻿namespace Felipe.CleanArchitecture.Application.Models.Responses;
-
+﻿namespace Felipe.CleanArchitecture.Api.Contracts.Trucks;
 public record TruckResponse
 (
     string LicensePlate,

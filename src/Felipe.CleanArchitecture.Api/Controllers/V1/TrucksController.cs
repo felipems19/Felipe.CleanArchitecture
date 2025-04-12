@@ -1,8 +1,12 @@
 ﻿using Asp.Versioning;
+using Felipe.CleanArchitecture.Api.Contracts.Trucks;
 using Felipe.CleanArchitecture.Application.Common.Errors;
-using Felipe.CleanArchitecture.Application.Models.Requests;
-using Felipe.CleanArchitecture.Application.Models.Responses;
-using Felipe.CleanArchitecture.Application.UseCases;
+using Felipe.CleanArchitecture.Application.Features.Trucks.Create;
+using Felipe.CleanArchitecture.Application.Features.Trucks.Delete;
+using Felipe.CleanArchitecture.Application.Features.Trucks.Get;
+using Felipe.CleanArchitecture.Application.Features.Trucks.List;
+using Felipe.CleanArchitecture.Application.Features.Trucks.Update;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Felipe.CleanArchitecture.Api.Controllers.V1;
@@ -13,56 +17,85 @@ namespace Felipe.CleanArchitecture.Api.Controllers.V1;
 public class TrucksController() : BaseAppController
 {
     [HttpPost]
-    [ProducesResponseType(typeof(DefaultTruckResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(TruckOperationResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> RegisterTruck([FromBody] AddTruckRequest request, [FromServices] IAddTruckUseCase registerTruckUseCase)
+    public async Task<IActionResult> RegisterTruck(
+        [FromBody] CreateTruckRequest request,
+        [FromServices] IMediator mediator)
     {
-        return ProcessResult(await registerTruckUseCase.ExecuteAsync(Guid.NewGuid(), request.LicensePlate, request.Model));
+        var command = new CreateTruckCommand(Guid.NewGuid(), request.LicensePlate, request.Model);
+
+        var result = await mediator.Send(command);
+
+        return ProcessResult(result.Map(dto => new TruckOperationResponse(dto.Message)));
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(AllTrucksResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(TruckListResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetAllTrucks([FromServices] IGetAllTrucksUseCase useCase)
+    public async Task<IActionResult> ListTrucks([FromServices] IMediator mediator)
     {
-        return ProcessResult(await useCase.ExecuteAsync());
+        var result = await mediator.Send(new ListTrucksQuery());
+
+        return ProcessResult(result.Map(dto =>
+            new TruckListResponse(dto.Trucks
+                .Select(t => new TruckResponse(t.LicensePlate, t.Model))
+                .ToList()
+            )));
     }
 
     [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(TruckResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetTruckById(Guid id, [FromServices] IGetTruckByIdUseCase useCase)
+    public async Task<IActionResult> GetTruckById(Guid id, [FromServices] IMediator mediator)
     {
-        return ProcessResult(await useCase.ExecuteAsync(id));
+        var result = await mediator.Send(new GetTruckByIdQuery(id));
+
+        return ProcessResult(result.Map(dto => new TruckResponse(dto.LicensePlate, dto.Model)));
     }
 
     [HttpPut("{id:guid}")]
-    [ProducesResponseType(typeof(DefaultTruckResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(TruckOperationResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> UpdateTruck(Guid id, [FromBody] AddTruckRequest request, [FromServices] IUpdateTruckUseCase useCase)
+    public async Task<IActionResult> UpdateTruck(
+        Guid id,
+        [FromBody] CreateTruckRequest request,
+        [FromServices] IMediator mediator)
     {
-        return ProcessResult(await useCase.ExecuteAsync(id, request.LicensePlate, request.Model));
+        var command = new UpdateTruckCommand(id, request.LicensePlate, request.Model);
+
+        var result = await mediator.Send(command);
+
+        return ProcessResult(result.Map(dto => new TruckOperationResponse(dto.Message)));
     }
 
     [HttpDelete("{id:guid}")]
-    [ProducesResponseType(typeof(DefaultTruckResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(TruckOperationResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> DeleteTruck(Guid id, [FromServices] IDeleteTruckUseCase useCase)
+    public async Task<IActionResult> DeleteTruck(Guid id, [FromServices] IMediator mediator)
     {
-        return ProcessResult(await useCase.ExecuteAsync(id));
+        var command = new DeleteTruckCommand(id);
+
+        var result = await mediator.Send(command);
+
+        return ProcessResult(result.Map(dto => new TruckOperationResponse(dto.Message)));
     }
 
     [HttpDelete]
-    [ProducesResponseType(typeof(DefaultTruckResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(TruckOperationResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> DeleteAllTrucks([FromServices] IDeleteAllTrucksUseCase useCase)
+    public async Task<IActionResult> DeleteAllTrucks([FromServices] IMediator mediator)
     {
-        return ProcessResult(await useCase.ExecuteAsync());
+        var command = new DeleteAllTrucksCommand();
+
+        var result = await mediator.Send(command);
+
+        return ProcessResult(result.Map(dto => new TruckOperationResponse(dto.Message)));
     }
 }

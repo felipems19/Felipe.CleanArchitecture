@@ -8,7 +8,6 @@ public class Truck : BaseAuditableEntity
     public string LicensePlate { get; private set; }
     public string Model { get; private set; }
     public DateTime RegisteredAt { get; private set; }
-    public bool IsActive { get; private set; }
 
     public Truck(Guid id, string licensePlate, string model)
     {
@@ -16,7 +15,6 @@ public class Truck : BaseAuditableEntity
         LicensePlate = licensePlate;
         Model = model;
         RegisteredAt = DateTime.UtcNow;
-        IsActive = true;
 
         // Emitir evento de registro
         AddDomainEvent(new TruckRegisteredEvent
@@ -45,8 +43,6 @@ public class Truck : BaseAuditableEntity
 
     public void Delete()
     {
-        IsActive = false;
-
         // Emitir evento de exclusão
         AddDomainEvent(new TruckDeletedEvent
         {

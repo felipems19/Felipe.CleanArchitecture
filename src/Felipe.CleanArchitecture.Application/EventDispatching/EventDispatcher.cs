@@ -14,12 +14,18 @@ public class EventDispatcher(IServiceProvider serviceProvider) : IEventDispatche
     {
         foreach (var domainEvent in domainEvents)
         {
-            var handlerType = typeof(IEventHandler<>).MakeGenericType(domainEvent.GetType());
+            var eventType = domainEvent.GetType();
+            var handlerType = typeof(IEventHandler<>).MakeGenericType(eventType);
             var handlers = serviceProvider.GetServices(handlerType);
 
             foreach (var handler in handlers)
             {
-                await ((dynamic)handler).Handle((dynamic)domainEvent);
+                var method = handlerType.GetMethod("Handle");
+                if (method != null)
+                {
+                    var task = method.Invoke(handler, [domainEvent]) as Task;
+                    await task!;
+                }
             }
         }
     }

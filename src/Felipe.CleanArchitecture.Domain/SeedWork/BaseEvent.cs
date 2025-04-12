@@ -2,5 +2,5 @@
 
 public abstract class BaseEvent
 {
-    public DateTime OcurredOn { get; }
+    public DateTime OcurredOn { get; } = DateTime.UtcNow;
 }

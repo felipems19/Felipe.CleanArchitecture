@@ -7,9 +7,9 @@ using MediatR;
 namespace Felipe.CleanArchitecture.Application.Features.Trucks.Update;
 
 public class UpdateTruckCommandHandler(ITruckRepository repository)
-    : IRequestHandler<UpdateTruckCommand, Result<TruckOperationResponse>>
+    : IRequestHandler<UpdateTruckCommand, Result<TruckOperationDto>>
 {
-    public async Task<Result<TruckOperationResponse>> Handle(UpdateTruckCommand request, CancellationToken cancellationToken)
+    public async Task<Result<TruckOperationDto>> Handle(UpdateTruckCommand request, CancellationToken cancellationToken)
     {
         var truck = await repository.GetByIdAsync(request.Id);
         if (truck is null)
@@ -18,6 +18,6 @@ public class UpdateTruckCommandHandler(ITruckRepository repository)
         truck.UpdateInfo(request.LicensePlate, request.Model);
         await repository.UpdateAsync(truck);
 
-        return Result.Ok(new TruckOperationResponse("Caminhão atualizado com sucesso."));
+        return Result.Ok(new TruckOperationDto("Caminhão atualizado com sucesso."));
     }
 }

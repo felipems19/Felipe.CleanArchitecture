@@ -1,7 +1,9 @@
 ﻿namespace Felipe.CleanArchitecture.Application.Features.Trucks.Models;
 
-public record TruckResponse
+public record TruckDto
 (
     string LicensePlate,
-    string Model
+    string Model,
+    DateTime RegisteredAt,
+    bool MaintenanceOverdue
 );

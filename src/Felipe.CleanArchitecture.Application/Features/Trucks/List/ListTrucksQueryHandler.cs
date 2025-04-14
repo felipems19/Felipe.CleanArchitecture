@@ -17,8 +17,12 @@ public class ListTrucksQueryHandler(ITruckRepository repository)
             return Result.Fail(new NotFoundError("Nenhum caminhão encontrado."));
 
         var truckDetails = allTrucks
-            .Select(t => new TruckResponse(t.LicensePlate, t.Model))
-            .ToList();
+            .Select(t => new TruckDto(
+                t.LicensePlate,
+                t.Model,
+                t.RegisteredAt,
+                t.IsMaintenanceOverdue()
+            )).ToList();
 
         return Result.Ok(new TruckListDto(truckDetails));
     }

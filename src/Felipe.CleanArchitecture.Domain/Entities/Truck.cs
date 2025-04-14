@@ -8,18 +8,19 @@ public class Truck : BaseAuditableEntity
     public string LicensePlate { get; private set; }
     public string Model { get; private set; }
     public DateTime RegisteredAt { get; private set; }
+    public DateTime? LastMaintenanceDate { get; private set; }
 
-    public Truck(Guid id, string licensePlate, string model)
+    // Construtor principal
+    public Truck(string licensePlate, string model, DateTime? lastMaintenanceDate = null)
     {
-        Id = id;
         LicensePlate = licensePlate;
         Model = model;
         RegisteredAt = DateTime.UtcNow;
+        LastMaintenanceDate = lastMaintenanceDate;
 
-        // Emitir evento de registro
         AddDomainEvent(new TruckRegisteredEvent
         {
-            TruckId = id,
+            TruckId = Id,
             LicensePlate = licensePlate,
             Model = model,
             RegisteredAt = RegisteredAt
@@ -31,7 +32,6 @@ public class Truck : BaseAuditableEntity
         LicensePlate = licensePlate;
         Model = model;
 
-        // Emitir evento de atualização
         AddDomainEvent(new TruckUpdatedEvent
         {
             TruckId = Id,
@@ -41,13 +41,32 @@ public class Truck : BaseAuditableEntity
         });
     }
 
+    public void UpdateMaintenanceDate(DateTime? maintenanceDate)
+    {
+        LastMaintenanceDate = maintenanceDate;
+
+        // AddDomainEvent(new TruckMaintenanceUpdatedEvent { ... });
+    }
+
     public void Delete()
     {
-        // Emitir evento de exclusão
         AddDomainEvent(new TruckDeletedEvent
         {
             TruckId = Id,
             DeletedAt = DateTime.UtcNow
         });
+    }
+
+    public bool IsMaintenanceOverdue()
+    {
+        var now = DateTime.UtcNow;
+
+        if (LastMaintenanceDate.HasValue)
+        {
+            return (now - LastMaintenanceDate.Value).TotalDays > 180;
+        }
+
+        // Sem manutenção registrada, considera vencido se já se passaram 180 dias desde o registro
+        return (now - RegisteredAt).TotalDays > 180;
     }
 }

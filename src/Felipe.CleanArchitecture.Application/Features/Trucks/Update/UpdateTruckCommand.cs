@@ -5,4 +5,4 @@ using MediatR;
 namespace Felipe.CleanArchitecture.Application.Features.Trucks.Update;
 
 public record UpdateTruckCommand(Guid Id, string LicensePlate, string Model)
-    : IRequest<Result<TruckOperationResponse>>;
+    : IRequest<Result<TruckOperationDto>>;

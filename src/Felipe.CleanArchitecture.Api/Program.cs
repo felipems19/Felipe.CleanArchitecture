@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text.Json.Serialization;
 using Asp.Versioning;
 using Felipe.CleanArchitecture.Api;
+using Felipe.CleanArchitecture.Api.Contracts.Trucks.Validators;
 using Felipe.CleanArchitecture.Api.Filters;
 using Felipe.CleanArchitecture.Api.Infrastructure.Factories;
 using Felipe.CleanArchitecture.Api.Swagger;
@@ -11,6 +12,8 @@ using Felipe.CleanArchitecture.Application.Interfaces;
 using Felipe.CleanArchitecture.Infrastructure;
 using Felipe.CleanArchitecture.Infrastructure.Data;
 using Felipe.CleanArchitecture.Infrastructure.Services.Observability;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.FeatureManagement;
@@ -118,6 +121,9 @@ builder.Services.AddFeatureManagement(builder.Configuration.GetSection("FeatureF
 builder.Services.AddServices(builder.Configuration);
 builder.Services.AddInfrastructureModule(builder.Configuration);
 builder.Services.AddApplicationModule();
+
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateTruckRequestValidator>();
 
 var app = builder.Build();
 

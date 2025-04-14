@@ -4,4 +4,4 @@ using MediatR;
 
 namespace Felipe.CleanArchitecture.Application.Features.Trucks.Get;
 
-public record GetTruckByIdQuery(Guid Id) : IRequest<Result<TruckResponse>>;
+public record GetTruckByIdQuery(Guid Id) : IRequest<Result<TruckDto>>;

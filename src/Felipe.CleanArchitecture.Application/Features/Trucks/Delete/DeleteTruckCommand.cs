@@ -4,4 +4,4 @@ using MediatR;
 
 namespace Felipe.CleanArchitecture.Application.Features.Trucks.Delete;
 
-public record DeleteTruckCommand(Guid Id) : IRequest<Result<TruckOperationResponse>>;
+public record DeleteTruckCommand(Guid Id) : IRequest<Result<TruckOperationDto>>;

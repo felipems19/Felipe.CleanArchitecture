@@ -21,10 +21,14 @@ public class TrucksController() : BaseAppController
     [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> RegisterTruck(
-        [FromBody] CreateTruckRequest request,
+        [AsParameters] CreateTruckRequest request,
         [FromServices] IMediator mediator)
     {
-        var command = new CreateTruckCommand(Guid.NewGuid(), request.LicensePlate, request.Model);
+        var command = new CreateTruckCommand(
+            request.LicensePlate,
+            request.Model,
+            request.LastMaintenanceDate
+        );
 
         var result = await mediator.Send(command);
 
@@ -37,13 +41,20 @@ public class TrucksController() : BaseAppController
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> ListTrucks([FromServices] IMediator mediator)
     {
-        var result = await mediator.Send(new ListTrucksQuery());
+        var query = new ListTrucksQuery();
+
+        var result = await mediator.Send(query);
 
         return ProcessResult(result.Map(dto =>
-            new TruckListResponse(dto.Trucks
-                .Select(t => new TruckResponse(t.LicensePlate, t.Model))
-                .ToList()
-            )));
+            new TruckListResponse(
+                dto.Trucks.Select(t => new TruckResponse(
+                    LicensePlate: t.LicensePlate,
+                    Model: t.Model,
+                    RegisteredAt: t.RegisteredAt.ToString("dd/MM/yyyy"),
+                    MaintenanceStatus: t.MaintenanceOverdue ? "Vencida" : "OK"
+                )).ToList()
+            )
+        ));
     }
 
     [HttpGet("{id:guid}")]
@@ -52,9 +63,18 @@ public class TrucksController() : BaseAppController
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetTruckById(Guid id, [FromServices] IMediator mediator)
     {
-        var result = await mediator.Send(new GetTruckByIdQuery(id));
+        var query = new GetTruckByIdQuery(id);
 
-        return ProcessResult(result.Map(dto => new TruckResponse(dto.LicensePlate, dto.Model)));
+        var result = await mediator.Send(query);
+
+        return ProcessResult(result.Map(dto =>
+            new TruckResponse(
+                LicensePlate: dto.LicensePlate,
+                Model: dto.Model,
+                RegisteredAt: dto.RegisteredAt.ToString("dd/MM/yyyy"),
+                MaintenanceStatus: dto.MaintenanceOverdue ? "Vencida" : "OK"
+            )
+        ));
     }
 
     [HttpPut("{id:guid}")]

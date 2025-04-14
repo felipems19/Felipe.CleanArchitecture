@@ -1,12 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace Felipe.CleanArchitecture.Api.Contracts.Trucks;
 
-namespace Felipe.CleanArchitecture.Api.Contracts.Trucks;
-
-public record CreateTruckRequest
-(
-    [Required, StringLength(50, ErrorMessage = "A placa deve ter no máximo 50 caracteres.")]
+public record CreateTruckRequest(
     string LicensePlate,
-
-    [Required, StringLength(50, ErrorMessage = "O modelo deve ter no máximo 50 caracteres.")]
-    string Model
+    string Model,
+    DateTime? LastMaintenanceDate,
+    bool ConfirmTerms // <- campo exclusivo da API
 );

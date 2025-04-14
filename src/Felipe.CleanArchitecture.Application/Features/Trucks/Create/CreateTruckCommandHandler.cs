@@ -7,13 +7,13 @@ using MediatR;
 namespace Felipe.CleanArchitecture.Application.Features.Trucks.Create;
 
 public class CreateTruckCommandHandler(ITruckRepository repository)
-    : IRequestHandler<CreateTruckCommand, Result<TruckOperationResponse>>
+    : IRequestHandler<CreateTruckCommand, Result<TruckOperationDto>>
 {
-    public async Task<Result<TruckOperationResponse>> Handle(CreateTruckCommand request, CancellationToken cancellationToken)
+    public async Task<Result<TruckOperationDto>> Handle(CreateTruckCommand request, CancellationToken cancellationToken)
     {
-        var truck = new Truck(request.Id, request.LicensePlate, request.Model);
+        var truck = new Truck(request.LicensePlate, request.Model, request.LastMaintenanceDate);
         await repository.AddAsync(truck);
 
-        return Result.Ok(new TruckOperationResponse("Caminhão registrado com sucesso."));
+        return Result.Ok(new TruckOperationDto("Caminhão registrado com sucesso."));
     }
 }

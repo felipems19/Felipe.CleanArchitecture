@@ -2,5 +2,5 @@
 
 public record TruckListDto
 (
-    List<TruckResponse> Trucks
+    List<TruckDto> Trucks
 );

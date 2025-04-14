@@ -7,9 +7,9 @@ using MediatR;
 namespace Felipe.CleanArchitecture.Application.Features.Trucks.Delete;
 
 public class DeleteTruckCommandHandler(ITruckRepository repository)
-    : IRequestHandler<DeleteTruckCommand, Result<TruckOperationResponse>>
+    : IRequestHandler<DeleteTruckCommand, Result<TruckOperationDto>>
 {
-    public async Task<Result<TruckOperationResponse>> Handle(DeleteTruckCommand request, CancellationToken cancellationToken)
+    public async Task<Result<TruckOperationDto>> Handle(DeleteTruckCommand request, CancellationToken cancellationToken)
     {
         var truck = await repository.GetByIdAsync(request.Id);
         if (truck is null)
@@ -17,6 +17,6 @@ public class DeleteTruckCommandHandler(ITruckRepository repository)
 
         await repository.DeleteAsync(truck);
 
-        return Result.Ok(new TruckOperationResponse("Caminhão excluído com sucesso."));
+        return Result.Ok(new TruckOperationDto("Caminhão excluído com sucesso."));
     }
 }

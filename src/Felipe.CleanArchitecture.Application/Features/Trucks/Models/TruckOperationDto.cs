@@ -1,6 +1,6 @@
 ﻿namespace Felipe.CleanArchitecture.Application.Features.Trucks.Models;
 
-public record TruckOperationResponse
+public record TruckOperationDto
 (
     string Message
 );

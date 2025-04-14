@@ -4,5 +4,8 @@ using MediatR;
 
 namespace Felipe.CleanArchitecture.Application.Features.Trucks.Create;
 
-public record CreateTruckCommand(Guid Id, string LicensePlate, string Model)
-    : IRequest<Result<TruckOperationResponse>>;
+public record CreateTruckCommand(
+    string LicensePlate,
+    string Model,
+    DateTime? LastMaintenanceDate
+) : IRequest<Result<TruckOperationDto>>;

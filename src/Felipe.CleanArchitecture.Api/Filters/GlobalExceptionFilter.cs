@@ -8,7 +8,7 @@ namespace Felipe.CleanArchitecture.Api.Filters;
 
 public class GlobalExceptionFilter(CustomProblemDetailsFactory problemDetailsFactory, ICustomLogger<GlobalExceptionFilter> customLogger) : IExceptionFilter
 {
-    private static readonly Dictionary<Type, int> exceptionStatusCodes = new()
+    private static readonly Dictionary<Type, int> s_exceptionStatusCodes = new()
     {
         { typeof(InvalidOperationException), StatusCodes.Status400BadRequest },
         { typeof(UnauthorizedAccessException), StatusCodes.Status401Unauthorized },
@@ -55,7 +55,7 @@ public class GlobalExceptionFilter(CustomProblemDetailsFactory problemDetailsFac
         }
         else
         {
-            var statusCode = exceptionStatusCodes.TryGetValue(exception.GetType(), out var status)
+            var statusCode = s_exceptionStatusCodes.TryGetValue(exception.GetType(), out var status)
                 ? status
             : StatusCodes.Status500InternalServerError;
 

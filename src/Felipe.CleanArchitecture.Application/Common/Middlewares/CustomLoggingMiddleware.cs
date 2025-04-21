@@ -1,6 +1,6 @@
 ﻿using System.Text;
 using System.Text.Json;
-using Felipe.CleanArchitecture.Application.Models.Logging;
+using Felipe.CleanArchitecture.Application.Logging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.IO;

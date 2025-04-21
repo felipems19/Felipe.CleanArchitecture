@@ -1,4 +1,4 @@
-﻿namespace Felipe.CleanArchitecture.Application.Models.Logging;
+﻿namespace Felipe.CleanArchitecture.Application.Logging;
 
 public class LogProperties : Dictionary<string, object>
 {

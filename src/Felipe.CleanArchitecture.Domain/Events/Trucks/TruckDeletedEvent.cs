@@ -1,6 +1,6 @@
 ﻿using Felipe.CleanArchitecture.Domain.SeedWork;
 
-namespace Felipe.CleanArchitecture.Domain.Events;
+namespace Felipe.CleanArchitecture.Domain.Events.Trucks;
 
 public class TruckDeletedEvent : BaseEvent
 {

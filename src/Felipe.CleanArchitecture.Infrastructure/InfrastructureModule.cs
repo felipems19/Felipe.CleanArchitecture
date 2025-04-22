@@ -1,4 +1,4 @@
-﻿using Felipe.CleanArchitecture.Domain.Interfaces.Repositories;
+﻿using Felipe.CleanArchitecture.Domain.SeedWork;
 using Felipe.CleanArchitecture.Infrastructure.Data;
 using Felipe.CleanArchitecture.Infrastructure.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +13,7 @@ public static class InfrastructureModule
     public static void AddInfrastructureModule(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContexts(configuration);
-        services.AddScoped<ITruckRepository, TruckRepository>();
+        services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
     }
 
     public static IServiceCollection AddDbContexts(this IServiceCollection services, IConfiguration configuration)

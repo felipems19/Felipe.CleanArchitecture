@@ -1,11 +1,11 @@
 ﻿using Felipe.CleanArchitecture.Domain.SeedWork;
 
-namespace Felipe.CleanArchitecture.Domain.Events;
+namespace Felipe.CleanArchitecture.Domain.Events.Trucks;
 
-public class TruckUpdatedEvent : BaseEvent
+public class TruckRegisteredEvent : BaseEvent
 {
     public Guid TruckId { get; set; }
     public string? LicensePlate { get; set; }
     public string? Model { get; set; }
-    public DateTime UpdatedAt { get; set; }
+    public DateTime RegisteredAt { get; set; }
 }

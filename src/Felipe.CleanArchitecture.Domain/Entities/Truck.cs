@@ -1,4 +1,4 @@
-﻿using Felipe.CleanArchitecture.Domain.Events;
+﻿using Felipe.CleanArchitecture.Domain.Events.Trucks;
 using Felipe.CleanArchitecture.Domain.SeedWork;
 
 namespace Felipe.CleanArchitecture.Domain.Entities;

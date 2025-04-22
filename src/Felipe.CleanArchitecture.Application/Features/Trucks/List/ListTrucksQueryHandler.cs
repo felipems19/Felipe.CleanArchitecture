@@ -1,17 +1,18 @@
 ﻿using Felipe.CleanArchitecture.Application.Common.Errors;
 using Felipe.CleanArchitecture.Application.Features.Trucks.Models;
-using Felipe.CleanArchitecture.Domain.Interfaces.Repositories;
+using Felipe.CleanArchitecture.Domain.Entities;
+using Felipe.CleanArchitecture.Domain.SeedWork;
 using FluentResults;
 using MediatR;
 
 namespace Felipe.CleanArchitecture.Application.Features.Trucks.List;
 
-public class ListTrucksQueryHandler(ITruckRepository repository)
+public class ListTrucksQueryHandler(IRepository<Truck> repository)
     : IRequestHandler<ListTrucksQuery, Result<TruckListDto>>
 {
     public async Task<Result<TruckListDto>> Handle(ListTrucksQuery request, CancellationToken cancellationToken)
     {
-        var allTrucks = await repository.GetAllAsync();
+        var allTrucks = await repository.ListAsync(cancellationToken);
 
         if (allTrucks == null || allTrucks.Count <= 0)
             return Result.Fail(new NotFoundError("Nenhum caminhão encontrado."));

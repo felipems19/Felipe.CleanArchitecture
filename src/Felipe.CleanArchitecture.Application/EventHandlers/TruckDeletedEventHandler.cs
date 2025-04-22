@@ -1,5 +1,5 @@
 ﻿using Felipe.CleanArchitecture.Application.Interfaces;
-using Felipe.CleanArchitecture.Domain.Events;
+using Felipe.CleanArchitecture.Domain.Events.Trucks;
 
 namespace Felipe.CleanArchitecture.Application.EventHandlers;
 

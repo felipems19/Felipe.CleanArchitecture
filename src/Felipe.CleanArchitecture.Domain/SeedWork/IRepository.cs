@@ -1,6 +1,8 @@
-﻿namespace Felipe.CleanArchitecture.Domain.SeedWork;
+﻿using Felipe.CleanArchitecture.Domain.Interfaces;
 
-public interface IRepository<T>
+namespace Felipe.CleanArchitecture.Domain.SeedWork;
+
+public interface IRepository<T> : IBaseRepository<T> where T : BaseAuditableEntity
 {
     public IUnitOfWork UnitOfWork { get; }
 }

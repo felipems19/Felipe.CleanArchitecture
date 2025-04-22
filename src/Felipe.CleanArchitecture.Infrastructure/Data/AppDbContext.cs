@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using Felipe.CleanArchitecture.Domain.Entities;
+using Felipe.CleanArchitecture.Domain.SeedWork;
 using Felipe.CleanArchitecture.Infrastructure.Data.EntityConfigurations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
@@ -8,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Felipe.CleanArchitecture.Infrastructure.Data;
 
-public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
+public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options), IUnitOfWork
 {
     private IDbContextTransaction? _currentTransaction;
 

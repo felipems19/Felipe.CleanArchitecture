@@ -2,8 +2,8 @@
 
 public record TruckDto
 (
-    string LicensePlate,
-    string Model,
+    string? LicensePlate,
+    string? Model,
     DateTime RegisteredAt,
     bool MaintenanceOverdue
 );

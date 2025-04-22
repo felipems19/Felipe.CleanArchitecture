@@ -1,7 +1,9 @@
 ﻿using Felipe.CleanArchitecture.Domain.SeedWork;
 using Felipe.CleanArchitecture.Infrastructure.Data;
+using Felipe.CleanArchitecture.Infrastructure.Data.Interceptors;
 using Felipe.CleanArchitecture.Infrastructure.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,14 +16,16 @@ public static class InfrastructureModule
     {
         services.AddDbContexts(configuration);
         services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
+        services.AddScoped<ISaveChangesInterceptor, DispatchDomainEventsInterceptor>();
     }
 
     public static IServiceCollection AddDbContexts(this IServiceCollection services, IConfiguration configuration)
     {
         var databaseConnectionString = configuration.GetValue<string>("DatabaseConnectionString");
 
-        services.AddDbContext<AppDbContext>(options =>
+        services.AddDbContext<AppDbContext>((sp, options) =>
         {
+            options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
             options.UseSqlServer(databaseConnectionString, ConfigureOptions);
         });
 

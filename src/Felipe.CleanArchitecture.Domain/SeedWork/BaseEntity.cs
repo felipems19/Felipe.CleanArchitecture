@@ -6,6 +6,7 @@ public abstract class BaseEntity
 {
     public Guid Id { get; init; } = Guid.NewGuid();
 
+    [NotMapped]
     private readonly List<BaseEvent> _domainEvents = [];
 
     [NotMapped]

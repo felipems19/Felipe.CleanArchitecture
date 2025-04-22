@@ -145,6 +145,14 @@ new TruckResponse(
 )
 ```
 
+### Dispatching de eventos
+No projeto atual, o dispatch de eventos acontece através do `DispatchDomainEventsInterceptor` que foi injetado com `ISaveChangesInterceptor` no `InfrastructureModule`. Contudo, uma das formas de executar manualmente o dispatch seria através do código abaixo em um dos command handlers:
+
+```
+        await dispatcher.Dispatch(truck.DomainEvents);
+        truck.ClearDomainEvents();
+```
+
 ### Benefícios:
 - A Application permanece agnóstica de formatação ou exibição
 - A API apresenta os dados de forma amigável ao consumidor final

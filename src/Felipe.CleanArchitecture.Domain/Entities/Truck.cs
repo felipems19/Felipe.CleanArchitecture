@@ -5,12 +5,16 @@ namespace Felipe.CleanArchitecture.Domain.Entities;
 
 public class Truck : BaseAuditableEntity
 {
-    public string LicensePlate { get; private set; }
-    public string Model { get; private set; }
+    public string? LicensePlate { get; private set; }
+    public string? Model { get; private set; }
     public DateTime RegisteredAt { get; private set; }
     public DateTime? LastMaintenanceDate { get; private set; }
 
-    // Construtor principal
+    // Protected constructor used just for EF Core
+    protected Truck() { }
+
+    // Main constructor
+    // OBS: All Domain events will be triggered by interceptor
     public Truck(string licensePlate, string model, DateTime? lastMaintenanceDate = null)
     {
         LicensePlate = licensePlate;
@@ -66,7 +70,7 @@ public class Truck : BaseAuditableEntity
             return (now - LastMaintenanceDate.Value).TotalDays > 180;
         }
 
-        // Sem manutenção registrada, considera vencido se já se passaram 180 dias desde o registro
+        // If there is no maintenace scheduled, it will consider that 180 days has already passed since register
         return (now - RegisteredAt).TotalDays > 180;
     }
 }
